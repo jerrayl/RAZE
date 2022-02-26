@@ -14,6 +14,10 @@ import l_arrow from "./l-arrow.png";
 import l_arrow_h from "./l-arrow-h.png";
 import r_arrow from "./r-arrow.png";
 import r_arrow_h from "./r-arrow-h.png";
+import bricks_d from "./bricks_d.png";
+import production_d from "./production_d.png";
+import tag_d from "./tag_d.png";
+
 
 const icons = {
     troop: troop,
@@ -32,7 +36,9 @@ const icons = {
     l_arrow_h: l_arrow_h,
     r_arrow: r_arrow,
     r_arrow_h: r_arrow_h,
-
+    bricks_d: bricks_d,
+    tag_d: tag_d,
+    production_d: production_d
 };
 
 export default icons;

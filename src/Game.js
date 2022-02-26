@@ -6,6 +6,8 @@ import { ELEMENTS, buildings } from "./utils/constants";
 import { useState } from "react";
 import ElementCard from "./components/ElementCard";
 import BuildingCard from "./components/BuildingCard";
+import BuildingMenu from "./components/BuildingMenu";
+import TroopsMenu from "./components/TroopsMenu";
 
 function Game() {
     const board = Array(25).fill("");
@@ -44,95 +46,27 @@ function Game() {
             )}
 
             {showBuildingMenu && (
-                <div className="absolute bg-stone-700 w-96 h-screen left-0">
-                    <div className="mt-20 flex items-center px-8 py-4">
-                        <img src={icons.building} onClick={() => setShowBuildingMenu(false)} />
-                        <h2 className="text-white text-4xl pl-4">Buildings</h2>
-                        {selectedElement && (
-                            <img
-                                className="h-16 pl-4 cursor-pointer"
-                                onClick={() => setSelectedElement("")}
-                                src={elements[selectedElement]}
-                            />
-                        )}
-                    </div>
-                    {!selectedElement && (
-                        <div className="grid grid-cols-2 gap-x-1 gap-y-4 px-5 pt-2">
-                            {["Fire", "Water", "Earth", "Air", "Food"].map((element) => (
-                                <ElementCard
-                                    key={element}
-                                    setSelectedElement={setSelectedElement}
-                                    title={element}
-                                    image={elements[element.toUpperCase()]}
-                                />
-                            ))}
-                            <ElementCard
-                                key="castle"
-                                setSelectedElement={setSelectedElement}
-                                title="Castle"
-                                image={buildingImages["CASTLE"]}
-                            />
-                        </div>
-                    )}
-                    {selectedElement && (
-                        <div className="grid grid-flow-row gap-y-4 px-5 pt-2">
-                            {buildings
-                                .filter((building) => building.code.includes(selectedElement))
-                                .map((building) => (
-                                    <BuildingCard
-                                        key={building.code}
-                                        title={building.name}
-                                        image={buildingImages[building.code]}
-                                    />
-                                ))}
-                        </div>
-                    )}
-                </div>
+                <BuildingMenu
+                    setShowBuildingMenu={setShowBuildingMenu}
+                    setSelectedElement={setSelectedElement}
+                    selectedElement={selectedElement}
+                />
             )}
 
             {showTroopsMenu && (
-                <div className="absolute bg-stone-700 w-96 h-screen right-0">
-                    <div className="mt-20 flex items-center px-8 py-4">
-                        <img src={icons.troop} onClick={() => setShowTroopsMenu(false)} />
-                        <h2 className="text-white text-4xl pl-4">Troops</h2>
-                        {selectedElement && (
-                            <img
-                                className="h-16 pl-4 cursor-pointer"
-                                onClick={() => setSelectedElement("")}
-                                src={elements[selectedElement]}
-                            />
-                        )}
-                    </div>
-                    {!selectedElement && (
-                        <div className="grid grid-cols-2 gap-x-1 gap-y-4 px-5 pt-2">
-                            {["Fire", "Water", "Earth", "Air"].map((element) => (
-                                <ElementCard
-                                    key={element}
-                                    setSelectedElement={setSelectedElement}
-                                    title={element}
-                                    image={elements[element.toUpperCase()]}
-                                />
-                            ))}
-                        </div>
-                    )}
-                    {selectedElement && (
-                        <div className="grid grid-flow-row gap-y-4 px-5 pt-2">
-                            {buildings
-                                .filter((building) => building.code.includes(selectedElement))
-                                .map((building) => (
-                                    <BuildingCard
-                                        key={building.code}
-                                        title={building.name}
-                                        image={buildingImages[building.code]}
-                                    />
-                                ))}
-                        </div>
-                    )}
-                </div>
+                <TroopsMenu
+                    setShowTroopsMenu={setShowTroopsMenu}
+                    setSelectedElement={setSelectedElement}
+                    selectedElement={selectedElement}
+                />
             )}
 
             <div className={"flex " + (showBuildingMenu ? "pl-96" : "") + (showTroopsMenu ? "pr-96" : "")}>
-                <div className={"flex flex-col justify-between " + (!showTroopsMenu && !showBuildingMenu ? "mr-12" : "mr-4")}>
+                <div
+                    className={
+                        "flex flex-col justify-between " + (!showTroopsMenu && !showBuildingMenu ? "mr-12" : "mr-4")
+                    }
+                >
                     <div className="flex flex-col items-center mt-20">
                         <h2 className="text-white text-3xl">Modifiers</h2>
                         <div className="grid grid-cols-2 mt-2">
@@ -175,10 +109,24 @@ function Game() {
                         </div>
                     ))}
                 </div>
-                <div className={"flex flex-col justify-between " + (!showTroopsMenu && !showBuildingMenu ? "ml-12" : "ml-4")}>
-                    <div className="flex justify-around mt-28">
-                        <img src={icons.eye} className="mr-4" onMouseEnter={e => (e.currentTarget.src = icons.eye_h)} onMouseLeave={e => (e.currentTarget.src = icons.eye)}/>
-                        <img src={icons.u_arrow} className="mr-4" onMouseEnter={e => (e.currentTarget.src = icons.u_arrow_h)} onMouseLeave={e => (e.currentTarget.src = icons.u_arrow)} />
+                <div
+                    className={
+                        "flex flex-col justify-between " + (!showTroopsMenu && !showBuildingMenu ? "ml-12" : "ml-4")
+                    }
+                >
+                    <div className="flex flex-col items-center mt-20">
+                        <img
+                            src={icons.eye}
+                            className="w-16 h-16"
+                            onMouseEnter={(e) => (e.currentTarget.src = icons.eye_h)}
+                            onMouseLeave={(e) => (e.currentTarget.src = icons.eye)}
+                        />
+                        <img
+                            src={icons.u_arrow}
+                            className="w-16 h-16 mt-8"
+                            onMouseEnter={(e) => (e.currentTarget.src = icons.u_arrow_h)}
+                            onMouseLeave={(e) => (e.currentTarget.src = icons.u_arrow)}
+                        />
                     </div>
                     <div className="flex flex-col items-center">
                         <h2 className="text-white text-3xl">Production</h2>
