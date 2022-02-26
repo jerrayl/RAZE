@@ -1,58 +1,197 @@
 import title from "./assets/title.png";
 import icons from "./assets/icons/icon";
 import elements from "./assets/elements/elements";
+import buildingImages from "./assets/buildings/buildingImages";
 import { ELEMENTS, buildings } from "./utils/constants";
 import { useState } from "react";
+import ElementCard from "./components/ElementCard";
+import BuildingCard from "./components/BuildingCard";
 
 function Game() {
-    const displayBuildingName = (building) => (
-        <h2 className="text-white text-lg">
-            {building.name} {building.production}
-        </h2>
-    );
     const board = Array(25).fill("");
     const [showBuildingMenu, setShowBuildingMenu] = useState(false);
-    //{ELEMENTS.keys().map((element) => (
-    //    <img src={elements[element]} />
-    //))}
+    const [showTroopsMenu, setShowTroopsMenu] = useState(false);
+    const [selectedElement, setSelectedElement] = useState("");
+
     return (
         <div className="flex flex-col items-center font-serif">
-            <nav className="bg-stone-700 w-screen h-24 flex justify-around items-center px-8 text-3xl shadow-lg z-10">
-                <h2 className="text-white">Build Phase: Your turn</h2>
-                <img src={title} className="w-48" alt="title" />
-                <h2 className="text-white">End turn</h2>
+            <nav className="bg-stone-700 w-screen h-20 px-12 grid grid-cols-3 flex items-center text-3xl shadow-lg z-10">
+                <div className="flex justify-start">
+                    <h2 className="text-white">Build Phase: Your turn</h2>
+                </div>
+                <div className="flex justify-center">
+                    <img src={title} className="w-56" alt="title" />
+                </div>
+                <div className="flex justify-end">
+                    <h2 className="text-white">End turn</h2>
+                </div>
             </nav>
-            {!showBuildingMenu && (
+            {!showBuildingMenu && !showTroopsMenu && (
                 <button
                     onClick={() => setShowBuildingMenu(true)}
-                    className="absolute left-0 mt-36 bg-stone-700 hover:bg-stone-600 text-white text-4xl font-bold py-10 px-5 rounded-tr-lg rounded-br-lg shadow-lg"
+                    className="absolute left-0 mt-36 bg-stone-700 hover:bg-stone-600 text-white text-4xl font-bold py-8 px-5 rounded-tr-lg rounded-br-lg shadow-lg"
                 >
                     <img src={icons.building} />
                 </button>
             )}
-            <button className="absolute right-0 mt-36 bg-stone-700 hover:bg-stone-600 text-white text-4xl font-bold py-10 px-5 rounded-tl-lg rounded-bl-lg shadow-lg">
-                <img src={icons.troop} />
-            </button>
+            {!showTroopsMenu && !showBuildingMenu && (
+                <button
+                    onClick={() => setShowTroopsMenu(true)}
+                    className="absolute right-0 mt-36 bg-stone-700 hover:bg-stone-600 text-white text-4xl font-bold py-8 px-5 rounded-tl-lg rounded-bl-lg shadow-lg"
+                >
+                    <img src={icons.troop} />
+                </button>
+            )}
 
             {showBuildingMenu && (
-                <div
-                    onClick={() => setShowBuildingMenu(false)}
-                    className="absolute mt-24 bg-stone-700 w-96 h-screen left-0"
-                >
-                    <div className="flex items-center px-4 py-4">
-                        <img src={icons.building} />
+                <div className="absolute bg-stone-700 w-96 h-screen left-0">
+                    <div className="mt-20 flex items-center px-8 py-4">
+                        <img src={icons.building} onClick={() => setShowBuildingMenu(false)} />
                         <h2 className="text-white text-4xl pl-4">Buildings</h2>
+                        {selectedElement && (
+                            <img
+                                className="h-16 pl-4 cursor-pointer"
+                                onClick={() => setSelectedElement("")}
+                                src={elements[selectedElement]}
+                            />
+                        )}
                     </div>
-                    {buildings.filter((building) => building.production > 2).map(displayBuildingName)}
+                    {!selectedElement && (
+                        <div className="grid grid-cols-2 gap-x-1 gap-y-4 px-5 pt-2">
+                            {["Fire", "Water", "Earth", "Air", "Food"].map((element) => (
+                                <ElementCard
+                                    key={element}
+                                    setSelectedElement={setSelectedElement}
+                                    title={element}
+                                    image={elements[element.toUpperCase()]}
+                                />
+                            ))}
+                            <ElementCard
+                                key="castle"
+                                setSelectedElement={setSelectedElement}
+                                title="Castle"
+                                image={buildingImages["CASTLE"]}
+                            />
+                        </div>
+                    )}
+                    {selectedElement && (
+                        <div className="grid grid-flow-row gap-y-4 px-5 pt-2">
+                            {buildings
+                                .filter((building) => building.code.includes(selectedElement))
+                                .map((building) => (
+                                    <BuildingCard
+                                        key={building.code}
+                                        title={building.name}
+                                        image={buildingImages[building.code]}
+                                    />
+                                ))}
+                        </div>
+                    )}
                 </div>
             )}
 
-            <div className="grid grid-cols-5 mt-12">
-                {board.map((space, i) => (
-                    <div key={i} className="w-24 h-24 border-black border-2 flex flex-col justify-center">
-                        <h2 className="text-xl">{space}</h2>
+            {showTroopsMenu && (
+                <div className="absolute bg-stone-700 w-96 h-screen right-0">
+                    <div className="mt-20 flex items-center px-8 py-4">
+                        <img src={icons.troop} onClick={() => setShowTroopsMenu(false)} />
+                        <h2 className="text-white text-4xl pl-4">Troops</h2>
+                        {selectedElement && (
+                            <img
+                                className="h-16 pl-4 cursor-pointer"
+                                onClick={() => setSelectedElement("")}
+                                src={elements[selectedElement]}
+                            />
+                        )}
                     </div>
-                ))}
+                    {!selectedElement && (
+                        <div className="grid grid-cols-2 gap-x-1 gap-y-4 px-5 pt-2">
+                            {["Fire", "Water", "Earth", "Air"].map((element) => (
+                                <ElementCard
+                                    key={element}
+                                    setSelectedElement={setSelectedElement}
+                                    title={element}
+                                    image={elements[element.toUpperCase()]}
+                                />
+                            ))}
+                        </div>
+                    )}
+                    {selectedElement && (
+                        <div className="grid grid-flow-row gap-y-4 px-5 pt-2">
+                            {buildings
+                                .filter((building) => building.code.includes(selectedElement))
+                                .map((building) => (
+                                    <BuildingCard
+                                        key={building.code}
+                                        title={building.name}
+                                        image={buildingImages[building.code]}
+                                    />
+                                ))}
+                        </div>
+                    )}
+                </div>
+            )}
+
+            <div className={"flex " + (showBuildingMenu ? "pl-96" : "") + (showTroopsMenu ? "pr-96" : "")}>
+                <div className={"flex flex-col justify-between " + (!showTroopsMenu && !showBuildingMenu ? "mr-12" : "mr-4")}>
+                    <div className="flex flex-col items-center mt-20">
+                        <h2 className="text-white text-3xl">Modifiers</h2>
+                        <div className="grid grid-cols-2 mt-2">
+                            <div className="flex items-center">
+                                <img src={icons.sword} className="mr-4" />
+                                <h2 className="text-white text-4xl mr-4">12</h2>
+                            </div>
+                            <div className="flex items-center">
+                                <img src={icons.heart} className="mr-4" />
+                                <h2 className="text-white text-4xl mr-4">12</h2>
+                            </div>
+                            <div className="flex items-center">
+                                <img src={icons.bricks} className="mr-4" />
+                                <h2 className="text-white text-4xl mr-4">12</h2>
+                            </div>
+                            <div className="flex items-center">
+                                <img src={icons.carrot} className="mr-4" />
+                                <h2 className="text-white text-4xl mr-4">12</h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="flex flex-col items-center">
+                        <h2 className="text-white text-3xl">Resources</h2>
+                        <div className="grid grid-cols-2 mt-2">
+                            {Object.values(ELEMENTS).map((element) => (
+                                <div className="flex items-center">
+                                    <img className="w-20 mr-2" src={elements[element.toUpperCase()]} />
+                                    <h2 className="text-white text-4xl mr-2">12</h2>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-5 mt-12">
+                    {board.map((space, i) => (
+                        <div key={i} className="w-28 h-28 border-black border-2 flex flex-col justify-center">
+                            <h2 className="text-xl">{space}</h2>
+                        </div>
+                    ))}
+                </div>
+                <div className={"flex flex-col justify-between " + (!showTroopsMenu && !showBuildingMenu ? "ml-12" : "ml-4")}>
+                    <div className="flex justify-around mt-28">
+                        <img src={icons.eye} className="mr-4" onMouseEnter={e => (e.currentTarget.src = icons.eye_h)} onMouseLeave={e => (e.currentTarget.src = icons.eye)}/>
+                        <img src={icons.u_arrow} className="mr-4" onMouseEnter={e => (e.currentTarget.src = icons.u_arrow_h)} onMouseLeave={e => (e.currentTarget.src = icons.u_arrow)} />
+                    </div>
+                    <div className="flex flex-col items-center">
+                        <h2 className="text-white text-3xl">Production</h2>
+                        <div className="grid grid-cols-2 mt-2">
+                            {Object.values(ELEMENTS).map((element) => (
+                                <div className="flex items-center">
+                                    <img className="w-20 mr-2" src={elements[element.toUpperCase()]} />
+                                    <h2 className="text-white text-4xl mr-2">12</h2>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );

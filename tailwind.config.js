@@ -14,9 +14,5 @@ module.exports = {
     },
     plugins: [],
     extend: {
-        backgroundImage: {
-            "background-1": "url('/assets/background1.jpg')",
-            "background-2": "url('/assets/background2.jpg')"
-        }
     }
 };

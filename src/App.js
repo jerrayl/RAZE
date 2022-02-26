@@ -6,7 +6,7 @@ import Game from "./Game";
 
 function App() {
     return (
-        <div className="h-screen bg-[url('./assets/background1.jpg')]">
+        <div className="h-screen bg-[url('./assets/background1.jpg')] bg-cover">
             <Router>
                 <Routes>
                     <Route path="/" element={<Title />}/>

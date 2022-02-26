@@ -34,95 +34,154 @@ export const buildings = [
     {
         name : "Tavern",
         code: "FOOD-3",
-        cost : "",
+        cost : [
+            {[ELEMENTS.FIRE] : 4},
+            {[ELEMENTS.WATER] : 3},
+            {[ELEMENTS.EARTH] : 1}
+        ],
         production : 3,
-        health: "",
-        effect: ""
+        health: 3,
+        effect: null
     },
     {
-        name : "",
-        code: "",
-        cost : "",
+        name : "Sawmill",
+        code: "FIRE-1",
+        cost : [
+            {[ELEMENTS.WATER] : 1},
+            {[ELEMENTS.EARTH] : 1},
+            {[ELEMENTS.AIR] : 1}
+        ],
+        production : 1,
+        health: 1,
+        effect: null
+    },
+    {
+        name : "Oilfield",
+        code: "FIRE-2",
+        cost : [
+            {[ELEMENTS.WATER] : 3},
+            {[ELEMENTS.EARTH] : 2}
+        ],
         production : "",
         health: "",
         effect: ""
     },
     {
-        name : "",
-        code: "",
-        cost : "",
+        name : "Magic Forge",
+        code: "FIRE-3",
+        cost : [
+            {[ELEMENTS.WATER] : 3},
+            {[ELEMENTS.EARTH] : 2}
+        ],
         production : "",
         health: "",
         effect: ""
     },
     {
-        name : "",
-        code: "",
-        cost : "",
+        name : "Well",
+        code: "WATER-1",
+        cost : [
+            {[ELEMENTS.WATER] : 3},
+            {[ELEMENTS.EARTH] : 2}
+        ],
         production : "",
         health: "",
         effect: ""
     },
     {
-        name : "",
-        code: "",
-        cost : "",
+        name : "Potion Lab",
+        code: "WATER-2",
+        cost : [
+            {[ELEMENTS.WATER] : 3},
+            {[ELEMENTS.EARTH] : 2}
+        ],
         production : "",
         health: "",
         effect: ""
     },
     {
-        name : "",
-        code: "",
-        cost : "",
+        name : "Distillation Plant",
+        code: "WATER-3",
+        cost : [
+            {[ELEMENTS.WATER] : 3},
+            {[ELEMENTS.EARTH] : 2}
+        ],
         production : "",
         health: "",
         effect: ""
     },
     {
-        name : "",
-        code: "",
-        cost : "",
+        name : "Mine",
+        code: "EARTH-1",
+        cost : [
+            {[ELEMENTS.WATER] : 3},
+            {[ELEMENTS.EARTH] : 2}
+        ],
         production : "",
         health: "",
         effect: ""
     },
     {
-        name : "",
-        code: "",
-        cost : "",
+        name : "Quarry",
+        code: "EARTH-2",
+        cost : [
+            {[ELEMENTS.WATER] : 3},
+            {[ELEMENTS.EARTH] : 2}
+        ],
         production : "",
         health: "",
         effect: ""
     },
     {
-        name : "",
-        code: "",
-        cost : "",
+        name : "Occult Crystal",
+        code: "EARTH-3",
+        cost : [
+            {[ELEMENTS.WATER] : 3},
+            {[ELEMENTS.EARTH] : 2}
+        ],
         production : "",
         health: "",
         effect: ""
     },
     {
-        name : "",
-        code: "",
-        cost : "",
+        name : "Windmill",
+        code: "AIR-1",
+        cost : [
+            {[ELEMENTS.WATER] : 3},
+            {[ELEMENTS.EARTH] : 2}
+        ],
         production : "",
         health: "",
         effect: ""
     },
     {
-        name : "",
-        code: "",
-        cost : "",
+        name : "Airship Tower",
+        code: "AIR-2",
+        cost : [
+            {[ELEMENTS.WATER] : 3},
+            {[ELEMENTS.EARTH] : 2}
+        ],
         production : "",
         health: "",
         effect: ""
     },
     {
-        name : "",
-        code: "",
-        cost : "",
+        name : "Meteorology Tower",
+        code: "AIR-3",
+        cost : [
+            {[ELEMENTS.WATER] : 3},
+            {[ELEMENTS.EARTH] : 2}
+        ],
+        production : "",
+        health: "",
+        effect: ""
+    },
+    {
+        name : "Castle",
+        code: "CASTLE",
+        cost : [
+            {[ELEMENTS.ARCANE] : 5}
+        ],
         production : "",
         health: "",
         effect: ""
