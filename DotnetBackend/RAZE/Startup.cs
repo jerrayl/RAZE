@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.OpenApi.Models;
+using RAZE.Database;
 using RAZE.Business;
 using RAZE.Repositories;
 
@@ -71,6 +72,10 @@ namespace RAZE
                 endpoints.MapSwagger();
             });
 
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            using (var dbContext= serviceScope.ServiceProvider.GetService<DatabaseContext>()){
+                DatabaseSeed.Seed(dbContext);
+            }
         }
     }
 }

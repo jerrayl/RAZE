@@ -33,27 +33,27 @@ namespace RAZE.Business
 
         public List<BuildingModel> GetBuildings()
         {
+            var elements = _elements.Read(element => true).ToDictionary(element => element.Id, element => element.Name);
 
-var elements = _elements.Read(element => true).ToDictionary(element => element.Id, element => element.Name);
-
-           var buildings = _buildings.Read(building => true, building => building.BuildingCosts, building => building.Element);
-            return 
+            var buildings = _buildings.Read(building => true, building => building.BuildingCosts, building => building.Element);
+            return
                 buildings
-                .Select(building => new BuildingModel() { 
-                    
+                .Select(building => new BuildingModel()
+                {
                     Name = building.Name,
-        Identifier = building.Identifier,
-        Image = building.Image,
-        Tier = building.Tier,
-        Element = building.Element.Name,
-        Production = building.Production,
-        Health = building.Health,
-        Effect = building.Effect,
-        Cost = building.BuildingCosts.Select(cost => new CostModel(){
-            Element = elements[cost.ElementId],
-            Number = cost.Number
-
-        }).ToList() })
+                    Identifier = building.Identifier,
+                    Image = building.Image,
+                    Tier = building.Tier,
+                    Element = building.Element.Name,
+                    Production = building.Production,
+                    Health = building.Health,
+                    Effect = building.Effect,
+                    Cost = building.BuildingCosts.Select(cost => new CostModel()
+                    {
+                        Element = elements[cost.ElementId],
+                        Number = cost.Number
+                    }).ToList()
+                })
                 .ToList();
         }
 
