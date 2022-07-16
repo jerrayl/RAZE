@@ -1,7 +1,7 @@
 import icons from "../assets/icons/icon";
 import elements from "../assets/elements/elements";
 
-function BuildingCard({ title, image, cost, production, health, effect }) {
+function BuildingCard({ title, image, costs, production, health, effect }) {
     return (
         <div className="h-52 bg-stone-200 rounded-lg shadow-lg grid grid-cols-7 text-stone-700">
             <div className="flex col-span-4 justify-center items-center">
@@ -17,10 +17,10 @@ function BuildingCard({ title, image, cost, production, health, effect }) {
                     <img src={icons.production_d} className="h-10 w-10 mr-1" />
                     <h2 className="text-4xl mr-4">{production}</h2>
                 </div>
-                {Object.keys(cost).map((element) => (
-                    <div key={title + element} className="flex items-center">
-                        <img src={elements[element]} className="h-10 w-10 mr-1" />
-                        <h2 className="text-4xl mr-4">{cost[element]}</h2>
+                {costs.map((cost) => (
+                    <div key={title + cost.element} className="flex items-center">
+                        <img src={elements[cost.element]} className="h-10 w-10 mr-1" />
+                        <h2 className="text-4xl mr-4">{cost.number}</h2>
                     </div>
                 ))}
             </div>

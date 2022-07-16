@@ -12,6 +12,7 @@ using Microsoft.OpenApi.Models;
 using RAZE.Database;
 using RAZE.Business;
 using RAZE.Repositories;
+using RAZE.AutoMapper;
 
 namespace RAZE
 {
@@ -27,7 +28,7 @@ namespace RAZE
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-           
+
             services.AddDbContext<DatabaseContext>();
 
             services.AddScoped<IInfo, Info>();
@@ -40,6 +41,13 @@ namespace RAZE
                 c.DocInclusionPredicate((_, api) => !string.IsNullOrWhiteSpace(api.GroupName));
                 c.TagActionsBy(api => new[] { api.GroupName });
             });
+
+            services.AddAutoMapper(cfg =>
+            {
+                cfg.AddProfile(new AutoMapperProfileConfiguration());
+            });
+
+            services.AddCors();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -62,9 +70,17 @@ namespace RAZE
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseCors(builder =>
+              builder
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+            );
+            
+            app.UseStaticFiles();
 
             app.UseEndpoints(endpoints =>
             {
@@ -73,7 +89,8 @@ namespace RAZE
             });
 
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
-            using (var dbContext= serviceScope.ServiceProvider.GetService<DatabaseContext>()){
+            using (var dbContext = serviceScope.ServiceProvider.GetService<DatabaseContext>())
+            {
                 DatabaseSeed.Seed(dbContext);
             }
         }

@@ -4,6 +4,7 @@ using RAZE.Business;
 
 namespace RAZE.Controllers
 {
+    [Route("api")]
     public class InfoController : Controller
     {
         private IInfo _info;

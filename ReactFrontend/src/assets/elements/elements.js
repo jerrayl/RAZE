@@ -3,7 +3,7 @@ import water from "./WATER.png";
 import earth from "./EARTH.png";
 import air from "./AIR.png";
 import food from "./FOOD.png";
-import arcane from "./ARCANE.png";
+import arcana from "./ARCANA.png";
 
 const elements = {
     FIRE: fire,
@@ -11,7 +11,7 @@ const elements = {
     EARTH: earth,
     AIR: air,
     FOOD: food,
-    ARCANE: arcane
+    ARCANA: arcana
 };
 
 export default elements;

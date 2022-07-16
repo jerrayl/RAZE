@@ -54,3 +54,12 @@ C:\Users\jerra\Documents\Projects\RAZE\DotnetBackend\RAZE\obj\Debug\net6.0\refin
 C:\Users\jerra\Documents\Projects\RAZE\DotnetBackend\RAZE\obj\Debug\net6.0\RAZE.pdb
 C:\Users\jerra\Documents\Projects\RAZE\DotnetBackend\RAZE\obj\Debug\net6.0\RAZE.genruntimeconfig.cache
 C:\Users\jerra\Documents\Projects\RAZE\DotnetBackend\RAZE\obj\Debug\net6.0\ref\RAZE.dll
+C:\Users\jerra\Documents\Projects\RAZE\DotnetBackend\RAZE\bin\Debug\net6.0\AutoMapper.dll
+C:\Users\jerra\Documents\Projects\RAZE\DotnetBackend\RAZE\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\Users\jerra\Documents\Projects\RAZE\DotnetBackend\RAZE\bin\Debug\net6.0\Microsoft.AspNet.SignalR.Core.dll
+C:\Users\jerra\Documents\Projects\RAZE\DotnetBackend\RAZE\bin\Debug\net6.0\Microsoft.AspNet.SignalR.SystemWeb.dll
+C:\Users\jerra\Documents\Projects\RAZE\DotnetBackend\RAZE\bin\Debug\net6.0\Microsoft.Owin.dll
+C:\Users\jerra\Documents\Projects\RAZE\DotnetBackend\RAZE\bin\Debug\net6.0\Microsoft.Owin.Host.SystemWeb.dll
+C:\Users\jerra\Documents\Projects\RAZE\DotnetBackend\RAZE\bin\Debug\net6.0\Microsoft.Owin.Security.dll
+C:\Users\jerra\Documents\Projects\RAZE\DotnetBackend\RAZE\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Users\jerra\Documents\Projects\RAZE\DotnetBackend\RAZE\bin\Debug\net6.0\Owin.dll

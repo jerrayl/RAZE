@@ -2,15 +2,28 @@ import title from "./assets/title.png";
 import icons from "./assets/icons/icon";
 import elements from "./assets/elements/elements";
 import buildingImages from "./assets/buildings/buildingImages";
-import { ELEMENTS, buildings } from "./utils/constants";
-import { useState } from "react";
+import { ELEMENTS } from "./utils/constants";
+import { useEffect, useState } from "react";
 import ElementCard from "./components/ElementCard";
 import BuildingCard from "./components/BuildingCard";
 import BuildingMenu from "./components/BuildingMenu";
 import TroopsMenu from "./components/TroopsMenu";
+import { getBuildings } from "./utils/api";
 
 function Game() {
+
+    const fetchBuildings = async () => {
+        const response = await getBuildings();
+        console.log(response);
+        setBuildings(response);
+    }
+
+    useEffect(() => {
+        fetchBuildings();
+    }, [])
+
     const board = Array(25).fill("");
+    const [buildings, setBuildings] = useState([]);
     const [showBuildingMenu, setShowBuildingMenu] = useState(false);
     const [showTroopsMenu, setShowTroopsMenu] = useState(false);
     const [selectedElement, setSelectedElement] = useState("");
@@ -47,6 +60,7 @@ function Game() {
 
             {showBuildingMenu && (
                 <BuildingMenu
+                    buildings={buildings}
                     setShowBuildingMenu={setShowBuildingMenu}
                     setSelectedElement={setSelectedElement}
                     selectedElement={selectedElement}
