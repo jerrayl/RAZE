@@ -11,6 +11,8 @@ namespace RAZE.Repositories
 
         IEnumerable<T> Read();
 
+        T ReadOne(Func<T, bool> predicate, params Expression<Func<T, object>>[] navigationProperties);
+
         IEnumerable<T> Read(Func<T, bool> predicate, params Expression<Func<T, object>>[] navigationProperties);
 
         int Count();

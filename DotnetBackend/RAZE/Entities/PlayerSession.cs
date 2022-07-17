@@ -14,6 +14,7 @@ namespace RAZE.Entities
         public DateTime ExpiresAt { get; set; }
 
         public int PlayerNumber { get; set; }
+        public virtual Account Account { get; set; }
 
         public virtual List<PlayerTroop> PlayerTroops { get; set; }
 

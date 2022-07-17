@@ -33,7 +33,7 @@ namespace RAZE.Business
 
         public List<BuildingModel> GetBuildings()
         {
-            var elements = _elements.Read(element => true).ToDictionary(element => element.Id, element => element.Name);
+            var elements = _elements.Read().ToDictionary(element => element.Id, element => element.Name);
 
             var buildings = _buildings.Read(building => true, building => building.BuildingCosts, building => building.Element);
             return

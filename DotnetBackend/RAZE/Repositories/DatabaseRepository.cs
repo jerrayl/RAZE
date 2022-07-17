@@ -31,6 +31,17 @@ namespace RAZE.Repositories
             return _entities.AsEnumerable();
         }
 
+        public T ReadOne(Func<T, bool> predicate,
+             params Expression<Func<T, object>>[] navigationProperties)
+        {
+            IQueryable<T> dbQuery = _dbContext.Set<T>();
+
+            foreach (Expression<Func<T, object>> navigationProperty in navigationProperties)
+                dbQuery = dbQuery.Include<T, object>(navigationProperty);
+
+            return dbQuery.Where(predicate).SingleOrDefault();
+        }
+
         public IEnumerable<T> Read(Func<T, bool> predicate,
              params Expression<Func<T, object>>[] navigationProperties)
         {

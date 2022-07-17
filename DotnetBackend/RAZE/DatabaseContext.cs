@@ -22,6 +22,8 @@ namespace RAZE
             if (!options.IsConfigured) options.UseSqlite("Data Source=RAZE.db");
         }
 
+        public DbSet<Account> Accounts { get; set; }
+
         public DbSet<BonusType> BonusTypes { get; set; }
 
         public DbSet<Building> Buildings { get; set; }
@@ -43,6 +45,8 @@ namespace RAZE
         public DbSet<PlayerSession> PlayerSessions { get; set; }
 
         public DbSet<PlayerTroop> PlayerTroops { get; set; }
+
+        public DbSet<Request> Requests { get; set; }
 
         public DbSet<StatusType> StatusTypes { get; set; }
 

@@ -1,18 +1,14 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.OpenApi.Models;
 using RAZE.Database;
 using RAZE.Business;
 using RAZE.Repositories;
 using RAZE.AutoMapper;
+using RAZE.SignalR;
 
 namespace RAZE
 {
@@ -32,6 +28,7 @@ namespace RAZE
             services.AddDbContext<DatabaseContext>();
 
             services.AddScoped<IInfo, Info>();
+            services.AddScoped<IPlayer, Player>();
             services.AddScoped(typeof(IDatabaseRepository<>), typeof(DatabaseRepository<>));
 
             // Add Swagger
@@ -48,6 +45,8 @@ namespace RAZE
             });
 
             services.AddCors();
+
+            services.AddSignalR();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -75,9 +74,10 @@ namespace RAZE
 
             app.UseCors(builder =>
               builder
-                .AllowAnyOrigin()
+                .WithOrigins("http://localhost:3000")
                 .AllowAnyHeader()
                 .AllowAnyMethod()
+                .AllowCredentials()
             );
             
             app.UseStaticFiles();
@@ -86,6 +86,7 @@ namespace RAZE
             {
                 endpoints.MapDefaultControllerRoute();
                 endpoints.MapSwagger();
+                endpoints.MapHub<SignalRHub>("/signalr");
             });
 
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
