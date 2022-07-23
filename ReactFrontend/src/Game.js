@@ -19,21 +19,19 @@ function Game({ gameState, email, placeBuilding }) {
     }, [])
 
     useEffect(() => {
-        if (gameState){
+        if (gameState) {
             setPlayerState(gameState.players.filter(player => player.email == email)[0]);
-            setOpponentState(gameState.players.filter(player => player.email != email)[0]);    
+            setOpponentState(gameState.players.filter(player => player.email != email)[0]);
         }
     }, [gameState])
 
     const getState = () => displayOwnState ? playerState : opponentState;
 
     const placeOnBoard = (boardSpace) => {
-        if (selectedBuilding != null){
+        if (selectedBuilding != null) {
             placeBuilding(boardSpace, selectedBuilding);
         }
     }
-
-    
 
     const [hoverSpace, setHoverSpace] = useState(null);
     const [buildings, setBuildings] = useState([]);
@@ -44,10 +42,6 @@ function Game({ gameState, email, placeBuilding }) {
     const [playerState, setPlayerState] = useState(null);
     const [opponentState, setOpponentState] = useState(null);
     const [selectedBuilding, setSelectedBuilding] = useState(null);
-
-    useEffect(() => {
-        console.log(selectedBuilding);
-    }, [selectedBuilding]);
 
     return (
         <div className="flex flex-col items-center font-serif">
@@ -105,19 +99,19 @@ function Game({ gameState, email, placeBuilding }) {
                     }
                 >
                     <div className="flex flex-col items-center mt-20">
-                        <h2 className="text-white text-3xl">{displayOwnState? "Your" : "Opponent's"} Bonuses</h2>
+                        <h2 className="text-white text-3xl">{displayOwnState ? "Your" : "Opponent's"} Bonuses</h2>
                         <div className="grid grid-cols-2 mt-2">
                             {getState() && getState().playerBonuses.map((bonus) => (
                                 <div key={bonus.bonusType} className="flex items-center">
                                     <img src={BONUS_ICONS[bonus.bonusType]} className="mr-4" />
-                                <h2 className="text-white text-4xl mr-4">{bonus.number}</h2>
+                                    <h2 className="text-white text-4xl mr-4">{bonus.number}</h2>
                                 </div>
                             ))}
                         </div>
                     </div>
 
                     <div className="flex flex-col items-center">
-                        <h2 className="text-white text-3xl">{displayOwnState? "Your" : "Opponent's"} Resources</h2>
+                        <h2 className="text-white text-3xl">{displayOwnState ? "Your" : "Opponent's"} Resources</h2>
                         <div className="grid grid-cols-2 mt-2">
                             {getState() && getState().playerResources.map((resource) => (
                                 <div key={"resource" + resource.element} className="flex items-center">
@@ -131,12 +125,13 @@ function Game({ gameState, email, placeBuilding }) {
 
                 <div className="grid grid-cols-5 mt-12">
                     {Array(25).fill().map((_, i) => (
-                        <div key={i} 
-                            onClick={() => placeOnBoard(i)} 
+                        <div key={i}
+                            onClick={() => placeOnBoard(i)}
                             onMouseEnter={() => setHoverSpace(i)}
                             onMouseLeave={() => setHoverSpace(null)}
                             className="w-28 h-28 border-black border-2 flex flex-col justify-center">
-                            {!!(selectedBuilding != null && hoverSpace != null && hoverSpace == i) && <img src={buildingImages[buildings.filter(building => building.identifier == selectedBuilding)[0].image]}/>}
+                            {getState() && getState().playerBuildings.filter(building => building.boardSpace == i).length > 0 && <img src={buildingImages[buildings.filter(building => building.identifier == getState().playerBuildings.filter(building => building.boardSpace == i)[0].buildingIdentifier)[0].image]} />}
+                            {!!(!(getState() && getState().playerBuildings.filter(building => building.boardSpace == i).length > 0) && selectedBuilding != null && hoverSpace != null && hoverSpace == i) && <img src={buildingImages[buildings.filter(building => building.identifier == selectedBuilding)[0].image]} />}
                         </div>
                     ))}
                 </div>
@@ -161,7 +156,7 @@ function Game({ gameState, email, placeBuilding }) {
                         />
                     </div>
                     <div className="flex flex-col items-center">
-                        <h2 className="text-white text-3xl">{displayOwnState? "Your" : "Opponent's"} Production</h2>
+                        <h2 className="text-white text-3xl">{displayOwnState ? "Your" : "Opponent's"} Production</h2>
                         <div className="grid grid-cols-2 mt-2">
                             {getState() && getState().playerProduction.map((production) => (
                                 <div key={"production" + production.element} className="flex items-center">

@@ -36,7 +36,9 @@ function SignalR(props) {
     }
 
     const placeBuilding = async (boardSpace, buildingIdentifier) => {
-        await connection.invoke("placeBuilding", {boardSpace: boardSpace, buildingIdentifier: buildingIdentifier});
+        const response = await connection.invoke("placeBuilding", { boardSpace: boardSpace, buildingIdentifier: buildingIdentifier });
+        if (response != SIGNALR_CODES.SUCCESS)
+            alert(response);
     }
 
     useEffect(() => {
@@ -49,9 +51,9 @@ function SignalR(props) {
     }, []);
 
     useEffect(() => {
-        if (connected && sessionStorage.email){
+        if (connected && sessionStorage.email) {
             setEmail(sessionStorage.email);
-            login(sessionStorage.email);    
+            login(sessionStorage.email);
         }
     }, [connected])
 
@@ -60,7 +62,7 @@ function SignalR(props) {
             connection.start()
                 .then(result => {
                     setConnected(true);
-                    
+
                     connection.on('Request', message => {
                         setRequests(currRequests => [message, ...currRequests]);
                     });
@@ -78,7 +80,7 @@ function SignalR(props) {
     }, [connection]);
 
     return <>{gameStarted ?
-        <Game gameState={gameState} email={email} placeBuilding={placeBuilding}/> :
+        <Game gameState={gameState} email={email} placeBuilding={placeBuilding} /> :
         <Title connected={connected} email={email} setEmail={setEmail} loggedIn={loggedIn} login={login} sendRequest={sendRequest} requests={requests} acceptRequest={acceptRequest} />}</>;
 }
 
