@@ -6,14 +6,13 @@ namespace RAZE.Entities
     public class PlayerSession : BaseEntity
     {
         public int AccountId { get; set; }
+        public bool IsCurrentPlayer { get; set; }
 
-        public int RoomId { get; set; }
+        public int? GameRoomId { get; set; }
 
         public string Token { get; set; }
 
         public DateTime ExpiresAt { get; set; }
-
-        public int PlayerNumber { get; set; }
         public virtual Account Account { get; set; }
 
         public virtual List<PlayerTroop> PlayerTroops { get; set; }

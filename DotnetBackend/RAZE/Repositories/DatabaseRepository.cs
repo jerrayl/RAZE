@@ -18,11 +18,19 @@ namespace RAZE.Repositories
             _entities = dbContext.Set<T>();
         }
 
-        public void Create(T entity)
+        public void Add(T entity)
         {
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity));
             _entities.Add(entity);
+            _dbContext.SaveChanges();
+        }
+
+        public void Update(T entity)
+        {
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity));
+            _entities.Update(entity);
             _dbContext.SaveChanges();
         }
 

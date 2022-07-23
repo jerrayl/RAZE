@@ -5,9 +5,12 @@ module.exports = {
     theme: {
         colors: {
             stone: colors.stone,
-            white: colors.white
+            white: colors.white,
+            red: colors.red,
+            green: colors.green
         },
         fontFamily: {
+            sans: ["sans"],
             serif: ["Lora", "serif"]
         },
         extend: {}

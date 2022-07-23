@@ -29,6 +29,7 @@ namespace RAZE
 
             services.AddScoped<IInfo, Info>();
             services.AddScoped<IPlayer, Player>();
+            services.AddScoped<IGame, Game>();
             services.AddScoped(typeof(IDatabaseRepository<>), typeof(DatabaseRepository<>));
 
             // Add Swagger

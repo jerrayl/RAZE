@@ -3,10 +3,23 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace RAZE.Migrations
 {
-    public partial class Initial : Migration
+    public partial class Database : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Accounts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Email = table.Column<string>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Accounts", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "BonusTypes",
                 columns: table => new
@@ -44,6 +57,34 @@ namespace RAZE.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_StatusTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Requests",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Identifier = table.Column<string>(type: "TEXT", nullable: true),
+                    SenderId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ReceiverId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ExpiresAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Requests", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Requests_Accounts_ReceiverId",
+                        column: x => x.ReceiverId,
+                        principalTable: "Accounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Requests_Accounts_SenderId",
+                        column: x => x.SenderId,
+                        principalTable: "Accounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -104,8 +145,7 @@ namespace RAZE.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Identifier = table.Column<string>(type: "TEXT", nullable: true),
-                    StatusTypeId = table.Column<int>(type: "INTEGER", nullable: false),
-                    PlayerId = table.Column<int>(type: "INTEGER", nullable: false)
+                    StatusTypeId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -115,7 +155,7 @@ namespace RAZE.Migrations
                         column: x => x.StatusTypeId,
                         principalTable: "StatusTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -167,15 +207,20 @@ namespace RAZE.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     AccountId = table.Column<int>(type: "INTEGER", nullable: false),
-                    RoomId = table.Column<int>(type: "INTEGER", nullable: false),
+                    IsCurrentPlayer = table.Column<bool>(type: "INTEGER", nullable: false),
+                    GameRoomId = table.Column<int>(type: "INTEGER", nullable: true),
                     Token = table.Column<string>(type: "TEXT", nullable: true),
-                    ExpiresAt = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    PlayerNumber = table.Column<int>(type: "INTEGER", nullable: false),
-                    GameRoomId = table.Column<int>(type: "INTEGER", nullable: true)
+                    ExpiresAt = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PlayerSessions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PlayerSessions_Accounts_AccountId",
+                        column: x => x.AccountId,
+                        principalTable: "Accounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_PlayerSessions_GameRooms_GameRoomId",
                         column: x => x.GameRoomId,
@@ -219,8 +264,7 @@ namespace RAZE.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     BuildingId = table.Column<int>(type: "INTEGER", nullable: false),
                     PlayerId = table.Column<int>(type: "INTEGER", nullable: false),
-                    BoardX = table.Column<int>(type: "INTEGER", nullable: false),
-                    BoardY = table.Column<int>(type: "INTEGER", nullable: false),
+                    BoardSpace = table.Column<int>(type: "INTEGER", nullable: false),
                     Health = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -302,8 +346,7 @@ namespace RAZE.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     TroopId = table.Column<int>(type: "INTEGER", nullable: false),
                     PlayerId = table.Column<int>(type: "INTEGER", nullable: false),
-                    BoardX = table.Column<int>(type: "INTEGER", nullable: false),
-                    BoardY = table.Column<int>(type: "INTEGER", nullable: false),
+                    BoardSpace = table.Column<int>(type: "INTEGER", nullable: false),
                     BoardSlot = table.Column<int>(type: "INTEGER", nullable: false),
                     Health = table.Column<int>(type: "INTEGER", nullable: false)
                 },
@@ -380,6 +423,11 @@ namespace RAZE.Migrations
                 column: "PlayerId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PlayerSessions_AccountId",
+                table: "PlayerSessions",
+                column: "AccountId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PlayerSessions_GameRoomId",
                 table: "PlayerSessions",
                 column: "GameRoomId");
@@ -393,6 +441,16 @@ namespace RAZE.Migrations
                 name: "IX_PlayerTroops_TroopId",
                 table: "PlayerTroops",
                 column: "TroopId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Requests_ReceiverId",
+                table: "Requests",
+                column: "ReceiverId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Requests_SenderId",
+                table: "Requests",
+                column: "SenderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TroopCosts_TroopId",
@@ -426,6 +484,9 @@ namespace RAZE.Migrations
                 name: "PlayerTroops");
 
             migrationBuilder.DropTable(
+                name: "Requests");
+
+            migrationBuilder.DropTable(
                 name: "TroopCosts");
 
             migrationBuilder.DropTable(
@@ -439,6 +500,9 @@ namespace RAZE.Migrations
 
             migrationBuilder.DropTable(
                 name: "Troops");
+
+            migrationBuilder.DropTable(
+                name: "Accounts");
 
             migrationBuilder.DropTable(
                 name: "GameRooms");

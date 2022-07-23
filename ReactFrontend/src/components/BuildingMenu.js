@@ -4,7 +4,7 @@ import ElementCard from "./ElementCard";
 import BuildingCard from "./BuildingCard";
 import buildingImages from "../assets/buildings/buildingImages";
 
-function BuildingMenu({ buildings, setShowBuildingMenu, setSelectedElement, selectedElement }) {
+function BuildingMenu({ buildings, setShowBuildingMenu, setSelectedElement, selectedElement, selectedBuilding, setSelectedBuilding}) {
     return (
         <div className="absolute bg-stone-700 w-96 h-screen left-0 overflow-y-scroll scrollbar scrollbar-thin scrollbar-thumb-stone-500">
             <div className="mt-20 flex items-center px-8 py-4">
@@ -37,12 +37,15 @@ function BuildingMenu({ buildings, setShowBuildingMenu, setSelectedElement, sele
                         .map((building) => (
                             <BuildingCard
                                 key={building.identifier}
+                                identifier={building.identifier}
                                 title={building.name}
                                 costs={building.cost}
                                 production={building.production}
                                 health={building.health}
                                 effect={building.effect}
                                 image={buildingImages[building.image]}
+                                selectedBuilding={selectedBuilding}
+                                setSelectedBuilding={setSelectedBuilding}
                             />
                         ))}
                 </div>

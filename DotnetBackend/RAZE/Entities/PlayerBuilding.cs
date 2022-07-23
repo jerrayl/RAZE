@@ -6,9 +6,7 @@ namespace RAZE.Entities
 
         public int PlayerId { get; set; }
 
-        public int BoardX { get; set; }
-
-        public int BoardY { get; set; }
+        public int BoardSpace { get; set; }
 
         public int Health { get; set; }
 

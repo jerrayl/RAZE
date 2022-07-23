@@ -29,10 +29,10 @@ namespace RAZE.Database
             var elementsDict = database.Elements.ToDictionary(e => e.Name, e => e.Id);
 
             var bonusTypes = new List<BonusType>(){
-                new BonusType() {Name = "Attack"},
-                new BonusType() {Name = "TroopHealth"},
-                new BonusType() {Name = "BuildingHealth"},
-                new BonusType() {Name = "Food"}
+                new BonusType() {Name = Constants.ATTACK},
+                new BonusType() {Name = Constants.TROOP_HEALTH},
+                new BonusType() {Name = Constants.BUILDING_HEALTH},
+                new BonusType() {Name = Constants.FOOD}
             };
 
             foreach (var bonusType in bonusTypes)
@@ -42,9 +42,9 @@ namespace RAZE.Database
             }
 
             var statusTypes = new List<StatusType>(){
-                new StatusType() {Name = "Build"},
-                new StatusType() {Name = "Combat"},
-                new StatusType() {Name = "Game Over"}
+                new StatusType() {Name = Constants.BUILD},
+                new StatusType() {Name = Constants.COMBAT},
+                new StatusType() {Name = Constants.GAME_OVER}
             };
 
             foreach (var statusType in statusTypes)

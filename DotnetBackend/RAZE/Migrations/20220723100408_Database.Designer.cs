@@ -9,8 +9,8 @@ using RAZE;
 namespace RAZE.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20220717110400_AccountRequest")]
-    partial class AccountRequest
+    [Migration("20220723100408_Database")]
+    partial class Database
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -128,10 +128,7 @@ namespace RAZE.Migrations
                     b.Property<string>("Identifier")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("PlayerId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("StatusTypeId")
+                    b.Property<int?>("StatusTypeId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -171,10 +168,7 @@ namespace RAZE.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("BoardX")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("BoardY")
+                    b.Property<int>("BoardSpace")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("BuildingId")
@@ -258,10 +252,7 @@ namespace RAZE.Migrations
                     b.Property<int?>("GameRoomId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("PlayerNumber")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("RoomId")
+                    b.Property<bool>("IsCurrentPlayer")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Token")
@@ -285,10 +276,7 @@ namespace RAZE.Migrations
                     b.Property<int>("BoardSlot")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("BoardX")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("BoardY")
+                    b.Property<int>("BoardSpace")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Health")
@@ -430,9 +418,7 @@ namespace RAZE.Migrations
                 {
                     b.HasOne("RAZE.Entities.StatusType", "StatusType")
                         .WithMany()
-                        .HasForeignKey("StatusTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StatusTypeId");
 
                     b.Navigation("StatusType");
                 });

@@ -7,7 +7,8 @@ namespace RAZE.Repositories
 {
     public interface IDatabaseRepository<T> where T : BaseEntity
     {
-        void Create(T entity);
+        void Add(T entity);
+        void Update(T entity);
 
         IEnumerable<T> Read();
 

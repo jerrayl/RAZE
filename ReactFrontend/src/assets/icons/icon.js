@@ -17,15 +17,12 @@ import r_arrow_h from "./r-arrow-h.png";
 import bricks_d from "./bricks_d.png";
 import production_d from "./production_d.png";
 import tag_d from "./tag_d.png";
+import { BONUS_TYPES } from "../../utils/constants";
 
 
 const icons = {
     troop: troop,
     building: building,
-    sword: sword, 
-    bricks: bricks,
-    carrot: carrot,
-    heart: heart,
     eye: eye,
     eye_h: eye_h,
     u_arrow: u_arrow,
@@ -40,5 +37,12 @@ const icons = {
     tag_d: tag_d,
     production_d: production_d
 };
+
+export const BONUS_ICONS = {
+    [BONUS_TYPES.ATTACK]: sword,
+    [BONUS_TYPES.BUILDING_HEALTH]: bricks,
+    [BONUS_TYPES.TROOP_HEALTH]: heart,
+    [BONUS_TYPES.FOOD]: carrot,
+}
 
 export default icons;

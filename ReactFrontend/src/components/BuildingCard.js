@@ -1,9 +1,11 @@
 import icons from "../assets/icons/icon";
 import elements from "../assets/elements/elements";
 
-function BuildingCard({ title, image, costs, production, health, effect }) {
+function BuildingCard({ title, identifier, image, costs, production, health, effect, setSelectedBuilding, selectedBuilding }) {
     return (
-        <div className="h-52 bg-stone-200 rounded-lg shadow-lg grid grid-cols-7 text-stone-700">
+        <div
+            onClick={() => setSelectedBuilding(identifier)} 
+            className={(selectedBuilding == identifier ? "bg-green-400 " : "bg-stone-200 hover:bg-stone-400") + "h-52 cursor-pointer rounded-lg shadow-lg grid grid-cols-7 text-stone-700"}>
             <div className="flex col-span-4 justify-center items-center">
                 <img className="w-40" src={image} />
             </div>

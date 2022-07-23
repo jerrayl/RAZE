@@ -1,20 +1,16 @@
 import title from "./assets/title.png";
-import icons from "./assets/icons/icon";
-import elements from "./assets/elements/elements";
-import buildingImages from "./assets/buildings/buildingImages";
-import { ELEMENTS } from "./utils/constants";
+import icons, { BONUS_ICONS } from "./assets/icons/icon";
 import { useEffect, useState } from "react";
-import ElementCard from "./components/ElementCard";
-import BuildingCard from "./components/BuildingCard";
 import BuildingMenu from "./components/BuildingMenu";
 import TroopsMenu from "./components/TroopsMenu";
 import { getBuildings } from "./utils/api";
+import ELEMENT_ICONS from "./assets/elements/elements";
+import buildingImages from "./assets/buildings/buildingImages";
 
-function Game() {
+function Game({ gameState, email, placeBuilding }) {
 
     const fetchBuildings = async () => {
         const response = await getBuildings();
-        console.log(response);
         setBuildings(response);
     }
 
@@ -22,17 +18,42 @@ function Game() {
         fetchBuildings();
     }, [])
 
-    const board = Array(25).fill("");
+    useEffect(() => {
+        if (gameState){
+            setPlayerState(gameState.players.filter(player => player.email == email)[0]);
+            setOpponentState(gameState.players.filter(player => player.email != email)[0]);    
+        }
+    }, [gameState])
+
+    const getState = () => displayOwnState ? playerState : opponentState;
+
+    const placeOnBoard = (boardSpace) => {
+        if (selectedBuilding != null){
+            placeBuilding(boardSpace, selectedBuilding);
+        }
+    }
+
+    
+
+    const [hoverSpace, setHoverSpace] = useState(null);
     const [buildings, setBuildings] = useState([]);
     const [showBuildingMenu, setShowBuildingMenu] = useState(false);
     const [showTroopsMenu, setShowTroopsMenu] = useState(false);
     const [selectedElement, setSelectedElement] = useState("");
+    const [displayOwnState, setDisplayOwnState] = useState(true);
+    const [playerState, setPlayerState] = useState(null);
+    const [opponentState, setOpponentState] = useState(null);
+    const [selectedBuilding, setSelectedBuilding] = useState(null);
+
+    useEffect(() => {
+        console.log(selectedBuilding);
+    }, [selectedBuilding]);
 
     return (
         <div className="flex flex-col items-center font-serif">
             <nav className="bg-stone-700 w-screen h-20 px-12 grid grid-cols-3 flex items-center text-3xl shadow-lg z-10">
                 <div className="flex justify-start">
-                    <h2 className="text-white">Build Phase: Your turn</h2>
+                    <h2 className="text-white">{gameState?.status ? gameState.status : "Game Starting..."}: {gameState?.currentPlayer ? gameState.currentPlayer == email ? "Your turn" : "Opponent's turn" : ""}</h2>
                 </div>
                 <div className="flex justify-center">
                     <img src={title} className="w-56" alt="title" />
@@ -64,6 +85,8 @@ function Game() {
                     setShowBuildingMenu={setShowBuildingMenu}
                     setSelectedElement={setSelectedElement}
                     selectedElement={selectedElement}
+                    selectedBuilding={selectedBuilding}
+                    setSelectedBuilding={setSelectedBuilding}
                 />
             )}
 
@@ -82,34 +105,24 @@ function Game() {
                     }
                 >
                     <div className="flex flex-col items-center mt-20">
-                        <h2 className="text-white text-3xl">Modifiers</h2>
+                        <h2 className="text-white text-3xl">{displayOwnState? "Your" : "Opponent's"} Bonuses</h2>
                         <div className="grid grid-cols-2 mt-2">
-                            <div className="flex items-center">
-                                <img src={icons.sword} className="mr-4" />
-                                <h2 className="text-white text-4xl mr-4">12</h2>
-                            </div>
-                            <div className="flex items-center">
-                                <img src={icons.heart} className="mr-4" />
-                                <h2 className="text-white text-4xl mr-4">12</h2>
-                            </div>
-                            <div className="flex items-center">
-                                <img src={icons.bricks} className="mr-4" />
-                                <h2 className="text-white text-4xl mr-4">12</h2>
-                            </div>
-                            <div className="flex items-center">
-                                <img src={icons.carrot} className="mr-4" />
-                                <h2 className="text-white text-4xl mr-4">12</h2>
-                            </div>
+                            {getState() && getState().playerBonuses.map((bonus) => (
+                                <div key={bonus.bonusType} className="flex items-center">
+                                    <img src={BONUS_ICONS[bonus.bonusType]} className="mr-4" />
+                                <h2 className="text-white text-4xl mr-4">{bonus.number}</h2>
+                                </div>
+                            ))}
                         </div>
                     </div>
 
                     <div className="flex flex-col items-center">
-                        <h2 className="text-white text-3xl">Resources</h2>
+                        <h2 className="text-white text-3xl">{displayOwnState? "Your" : "Opponent's"} Resources</h2>
                         <div className="grid grid-cols-2 mt-2">
-                            {Object.values(ELEMENTS).map((element) => (
-                                <div className="flex items-center">
-                                    <img className="w-20 mr-2" src={elements[element.toUpperCase()]} />
-                                    <h2 className="text-white text-4xl mr-2">12</h2>
+                            {getState() && getState().playerResources.map((resource) => (
+                                <div key={"resource" + resource.element} className="flex items-center">
+                                    <img className="w-20 mr-2" src={ELEMENT_ICONS[resource.element]} />
+                                    <h2 className="text-white text-4xl mr-2">{resource.number}</h2>
                                 </div>
                             ))}
                         </div>
@@ -117,9 +130,13 @@ function Game() {
                 </div>
 
                 <div className="grid grid-cols-5 mt-12">
-                    {board.map((space, i) => (
-                        <div key={i} className="w-28 h-28 border-black border-2 flex flex-col justify-center">
-                            <h2 className="text-xl">{space}</h2>
+                    {Array(25).fill().map((_, i) => (
+                        <div key={i} 
+                            onClick={() => placeOnBoard(i)} 
+                            onMouseEnter={() => setHoverSpace(i)}
+                            onMouseLeave={() => setHoverSpace(null)}
+                            className="w-28 h-28 border-black border-2 flex flex-col justify-center">
+                            {!!(selectedBuilding != null && hoverSpace != null && hoverSpace == i) && <img src={buildingImages[buildings.filter(building => building.identifier == selectedBuilding)[0].image]}/>}
                         </div>
                     ))}
                 </div>
@@ -136,19 +153,20 @@ function Game() {
                             onMouseLeave={(e) => (e.currentTarget.src = icons.eye)}
                         />
                         <img
-                            src={icons.u_arrow}
+                            src={displayOwnState ? icons.u_arrow : icons.d_arrow}
                             className="w-16 h-16 mt-8"
-                            onMouseEnter={(e) => (e.currentTarget.src = icons.u_arrow_h)}
-                            onMouseLeave={(e) => (e.currentTarget.src = icons.u_arrow)}
+                            onClick={() => setDisplayOwnState(curr => !curr)}
+                            onMouseEnter={(e) => (e.currentTarget.src = displayOwnState ? icons.u_arrow_h : icons.d_arrow_h)}
+                            onMouseLeave={(e) => (e.currentTarget.src = displayOwnState ? icons.u_arrow : icons.d_arrow)}
                         />
                     </div>
                     <div className="flex flex-col items-center">
-                        <h2 className="text-white text-3xl">Production</h2>
+                        <h2 className="text-white text-3xl">{displayOwnState? "Your" : "Opponent's"} Production</h2>
                         <div className="grid grid-cols-2 mt-2">
-                            {Object.values(ELEMENTS).map((element) => (
-                                <div className="flex items-center">
-                                    <img className="w-20 mr-2" src={elements[element.toUpperCase()]} />
-                                    <h2 className="text-white text-4xl mr-2">12</h2>
+                            {getState() && getState().playerProduction.map((production) => (
+                                <div key={"production" + production.element} className="flex items-center">
+                                    <img className="w-20 mr-2" src={ELEMENT_ICONS[production.element]} />
+                                    <h2 className="text-white text-4xl mr-2">{production.number}</h2>
                                 </div>
                             ))}
                         </div>
